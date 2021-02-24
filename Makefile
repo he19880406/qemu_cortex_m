@@ -5,7 +5,7 @@ MACHINE := lm3s6965evb
 # make QEMU_PATH=qemu-system-arm will update the variable of the Makefile
 CMSIS ?= ./CMSIS_5
 # Use QEMU_PATH = qemu-system-arm if QEMU was installed through the apt command.
-QEMU_PATH ?= ./qemu/arm-softmmu/qemu-system-arm
+QEMU_PATH ?= qemu-system-arm
 TOOLCHAIN ?= ./gcc-arm-none-eabi-9-2019-q4-major/bin
 
 QEMU_COMMAND := $(QEMU_PATH) \
@@ -19,7 +19,7 @@ QEMU_COMMAND := $(QEMU_PATH) \
 
 BINARY_OBJDUMP := objdump_$(BINARY)
 
-CROSS_COMPILE = $(TOOLCHAIN)/arm-none-eabi-
+CROSS_COMPILE = arm-none-eabi-
 CC = $(CROSS_COMPILE)gcc
 GDB = $(CROSS_COMPILE)gdb
 OBJ = $(CROSS_COMPILE)objdump
@@ -73,4 +73,4 @@ gdb: $(BINARY)
 	$(GDB) $(BINARY) -ex "target remote:1234"
 
 clean:
-	rm -f $(BINARY_OBJDUMP) *.o *.elf 
+	rm -f $(BINARY_OBJDUMP) *.o *.elf
