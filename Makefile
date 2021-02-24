@@ -1,5 +1,11 @@
-BINARY := cm3.elf
-MACHINE := lm3s6965evb
+#BINARY := cm3.elf
+#MACHINE := lm3s6965evb
+
+BINARY := kernel.elf
+MACHINE := musca-b1 #mps2-an505
+DEVICE := ARMCM33
+CPU := cortex-m33
+MEMORY_SIZE := 16m
 
 # Variable with ?= assignement can be redefined when the makefile is called:
 # make QEMU_PATH=qemu-system-arm will update the variable of the Makefile
@@ -10,8 +16,8 @@ TOOLCHAIN ?= ./gcc-arm-none-eabi-9-2019-q4-major/bin
 
 QEMU_COMMAND := $(QEMU_PATH) \
 	-machine $(MACHINE) \
-	-cpu cortex-m3 \
-	-m 4096 \
+	-cpu $(CPU) \
+	-m $(MEMORY_SIZE) \
 	-nographic \
 	-semihosting \
 	-device loader,file=$(BINARY) \
@@ -26,19 +32,19 @@ OBJ = $(CROSS_COMPILE)objdump
 
 LINKER_SCRIPT = gcc_arm.ld
 
-SRC_ASM = $(CMSIS)/Device/ARM/ARMCM3/Source/GCC/startup_ARMCM3.S
+SRC_ASM = $(CMSIS)/Device/ARM/$(DEVICE)/Source/GCC/startup_$(DEVICE).S
 
-SRC_C = $(CMSIS)/Device/ARM/ARMCM3/Source/system_ARMCM3.c \
-	start.c
+SRC_C = $(CMSIS)/Device/ARM/$(DEVICE)/Source/system_$(DEVICE).c
 
-SRC_C += main.c
+#SRC_C += main.c
+SRC_C += start.c
 
-INCLUDE_FLAGS = -I$(CMSIS)/Device/ARM/ARMCM3/Include \
+INCLUDE_FLAGS = -I$(CMSIS)/Device/ARM/$(DEVICE)/Include \
 	-I$(CMSIS)/CMSIS/Core/Include \
 	-I. \
 	$(INCLUDE_FLAGS_APP)
 
-CFLAGS = -mcpu=cortex-m3 \
+CFLAGS = -mcpu=$(CPU) \
          -specs=nano.specs \
          -specs=nosys.specs \
          -specs=rdimon.specs \
