@@ -60,7 +60,7 @@ void logPrint(const char* format, ...)
 
 void _start(void)
 {
-  //main();
+  main();
   exit(0);
   while (1) {
   }
